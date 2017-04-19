@@ -6,6 +6,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath,amsthm,amssymb,upref}
 \usepackage[left=1cm, right = 1cm, top = 1cm, bottom = 1cm]{geometry}
+\usepackage{todonotes}
 
 
 \newtheorem{lemma}{Lemma}
@@ -14,6 +15,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
 
+\newcommand{\de}{\mathrm d}
 \newcommand{\Frechet}{Fr\'echet }
 \newcommand{\T}{\mathcal T}
 \newcommand{\eps}{\varepsilon}
@@ -21,11 +23,45 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\Q}{\mathbb Q}
 \newcommand{\E}{\mathbb E}
+\newcommand{\ednote}[1]{{\color{red}[#1]}}
 
 \newcommand{\del}{\partial}
 \newcommand{\dist}{\operatorname{dist}}
 
 \begin{document}
+\section{Cameron-Martin theory}
+We take a Gaussian measure in a separable Banach space $X$ (or a separable \Frechet space). Recall that this means that for any linear functional $f\in X^*$, the evaluation $f(x)$ is a normal random variable on $\R$. We can define a mean and a covariance by setting
+\begin{itemize}
+\item $a_\gamma(f) = \int_X f(x)\gamma(\de x)$, so $a_\gamma: X^*\to \R$, and hence $a_\gamma \in (X^*)'$.
+\item $B_\gamma(f, g) = \int_X [f(x) - a_\gamma(f)]\cdot [g(x)-a_\gamma(g)]\gamma(\de x)$, so $B_\gamma \in (X^*\times X^*)'$.
+\end{itemize}
+So far we only know that $a_\gamma$ is a linear map from $X^*$ (the so-called topological dual) to $\R$, i.e. $a_\gamma$ is an element of the ``algebraical dual of the topological dual'', because we don't know yet whether $a_\gamma$ is continuous (i.e. bounded). The exponential Gaussian moments we obtain from Fernique's theorem prove exactly this,\ednote{insert Fernique} and thus actually $a_\gamma \in X^{**}$. This is still kind of impractical: We can interpret $a_\gamma(f)$ as the mean of the measure ``in direction of $f$'', so we would like to view $a_\gamma$ as the ``general mean'' of the measure. But we think of the mean as an object in the probability space (think of sampling from a measure; the empirical mean will lie in the same space $X$ as the samples), but here we can only state $a_\gamma \in X^{**}$. Because $X \subsetneq X^{**}$, we need to do some work in order to identify $a_\gamma$ with an actual element in $X$. \ednote{Insert proof for $a_\gamma \in X$}
+\subsection{Creating a Hilbert space structure on linear functionals from scratch}
+We are working in a Banach space, so it is a small miracle that we are able to conjure a Hilbert space structure (but at first only in the realm of functionals $X^*$) out of thin air. Later we will construct an isometry from this Hilbert space into a strict subset of $X$. This Hilbert subspace is the Cameron-Martin space and has a set of very useful properties. But let's start at the beginning:
+
+It is a fundamental fact that every bounded linear functional has second moments with respect to a Gaussian measure, i.e. $X^*\subset L^2(X, \gamma)$. Even more, the embedding
+\begin{align*}
+j: X^* &\hookrightarrow L^2(X, \gamma)\\
+f &\mapsto f - a_\gamma(f)
+\end{align*}
+is continuous. 
+The image of $j$ is not closed in the $L^2$ topology, so we define:
+\[ X_\gamma^* = \overline{j(X^*)}^{L^2(X,\gamma)} \text{ is called the reproducing kernel Hilbert space},\]
+i.e. $X_\gamma^*$ consists of all $L^2$-limits of sequences of the form $(f_n-a_\gamma(f_n))_n$, with $f_n\in X^*$. \ednote{Characterize $X_\gamma^*$ further: All Gaussian random variables?}
+
+This is a definition one easily glances over but there are a few subtleties here that should be pointed out:
+\begin{itemize}
+\item Although each $f\in X^*$ is also a $f\in L^2(X, \gamma)$ (and by extension, $f-a_\gamma(f)\in X_\gamma^*$), there is quite a difference in viewing $f$ as a linear functional in $X^*$ or a square-integrable random variable: The main point is that two ``directions'' $f_1$, $f_2$ that differ only by a component that is degenerate (i.e. the measure puts no mass along this axis) are \textit{different} objects in $X^*$, but identical as elements in $L^2(X,\gamma)$. Take for example the degenerate Gaussian measure $\delta_0 \otimes N(0,1)$ in two dimensions: Here, $f_1(x) = x_1+x_2$ and $f_2(x) = x_2$ are definitely not the same functional, but as random variables they are identical, because $x_1 = 0$ a.s.
+\item While $f\in X^*$ is a linear functional (i.e. specifically $f(0)=0$), $j(f)$ isn't anymore, but is is rather an affine functional because its mean has been subtracted. On the other hand, $j(f)$ has zero mean, while this is generally not true for $f\in X^*$. This reasoning holds identically for elements $g\in X_\gamma^*$: By definition, $a_\gamma(g) = 0$, but $g(0)\neq 0$ in general. One has to be careful not to mix up those two ideas of ``going through the origin''.
+\item By using the covariance inner product $\langle f, g\rangle_{L^2(X, \gamma)} = B_\gamma(f, g) = \int_X [f(x) - a_\gamma(f)]\cdot [g(x)-a_\gamma(g)]\gamma(\de x)$, we obtain a Hilbert space structure in the image of $j$. This will be of great use later. 
+\end{itemize}
+
+By $L^2$ continuity, $a_\gamma$, $\hat \gamma$ and $B_\gamma$ can be extended with their domains changed: For any $X^*$ we can also use elements from $X_\gamma^*$, while for $g\in X_\gamma^*$, $a_\gamma(g) = 0$, $\hat \gamma(f) = \exp\{-\frac{1}{2}\|f\|_{L^2(X,\gamma)}\}$ and $B_\gamma(g_1, g_2) = \int_X g_1(x)g_2(x)\gamma(\de x)$ for $g_1,g_2\in X_\gamma^*$. Note that $X_\gamma^*$ is not a superset of $X^*$ because its elements all need to be centred (as random variables, i.e. $a_\gamma(f) = 0$ for $f\in X_\gamma^*$.
+
+\section{Transporting the Hilbert space structure into the probability space}
+So far, we only have a Hilbert space structure in the domain of linear functionals $f\in X^*$ (strictly speaking on $X_\gamma^*$).
+
+
 \section{\Frechet spaces}
 Let $X$ be a topological vector space with topology $\T$. A few preliminary definitions:
 \begin{definition}
