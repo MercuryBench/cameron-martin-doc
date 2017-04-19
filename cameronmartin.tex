@@ -40,7 +40,7 @@ A set $C$ is called
 \begin{definition}
 \begin{itemize}
 \item A collection of sets $\mathcal B \subset \T$ is called a base of the topology $\T$ if for every open set $U\in\T$ there is a $B\in \mathcal B$ with $B\in U$.
-\item A collection of sets $\mathcal B_x \subset \T$ is called a local base at $x$ of the topology $\T$ if for every neighborhood $U\in\T$ of $x$ (i.e. $x\in U$) there is a $B\in \mathcal{ B}$ with $B\in U$.
+\item A collection of sets $\mathcal B_x \subset \T$ is called a local base at $x$ of the topology $\T$ if for every neighborhood $U\in\T$ of $x$ (i.e. $x\in U$) there is a $B\in \mathcal{ B}_x$ with $B\in U$.
 \end{itemize}
 \end{definition}
 
@@ -48,7 +48,7 @@ We are going to compare two definitions of locally convex spaces.
 
 \begin{minipage}[t]{0.45\textwidth}
 \begin{definition}\label{def:l1}
-A topogical vector space $X$ is called \textit{locally convex} if the origin has a local base of absolutely convex absorbent sets.
+A topological vector space $X$ is called \textit{locally convex} if the origin has a local base of absolutely convex absorbent sets.
 \end{definition}
 \end{minipage}
 \hfill
@@ -250,7 +250,7 @@ f(x) = \sum_{j=1}^\infty a_j x_j
 with $\sum_{j=1}^\infty |a_j|^2 < \infty$.
 \end{lemma}
 \begin{proof}
-As $W^*$ can be identified with $c_{00}$ and $L^2(W,\mu$ with inner product $q$ can be identified with $l^2$, the space of square summable sequences, this is equivalent to $\overline{c_{00}}^{l^2} = l^2$, which is standard.
+As $W^*$ can be identified with $c_{00}$ and $L^2(W,\mu$ with inner product $q$ can be identified with $l^2$, the space of square summable sequences, this is equivalent to $\overline{c_{00}}^{l^2} = l^2$, which is for convenience proven in lemma \ref{lem:c00l2}.
 \end{proof}
 \begin{remark}
 Note one subtle point about \eqref{eq:l2}: For an arbitrary $x\in W$, the sum may not converge. It does, however, converge for $\mu$-a.e. $x\in W$. Indeed: Sums of independent random variables (and the $a_j\cdot x_j$ are i.i.d Gaussians) converge a.s. as soon as the sum of their variances converge. Thus, we only need to show
@@ -259,4 +259,50 @@ which follows immediately by $\E x_j^2 = 1$ and the condition on $(a_j)_j$.
 
 By the same calculation as in lemma \ref{lem:Gaussian}, we can show that $f$ is a Gaussian random variable with covariance form $q(f, g) = \sum_{j=1}^\infty f(e_j)g(e_j)$ where now the sum may contain infinitely many terms (but still is of finite value by the Cauchy-Schwarz inequality in $l^2$).
 \end{remark}
+
+\section{Appendix}
+\begin{lemma}[$(\R^\infty, \|\cdot\|_\infty)$ is complete]
+Let $(a^{(k)})_{k\in\N}$ be a Cauchy sequence (of sequences) in the space of sequences with the supremum norm, i.e.
+\[\text{for all } \eps > 0 \text{ there is a } K_\eps \text{ s. t. for all } k,l\geq K_\eps: \|a^{(k)} - a^{(l)}\|_\infty = \sup_n |a_n^{(k)} - a_n^{(l)}| < \eps.\footnote{\text{We can think of }$(a^{(k)})_k$ \text{ being a ``uniformly Cauchy'' sequence.}}  \]
+Then $a^{(k)} \to a$ in $(\R^\infty, \|\cdot\|_\infty)$, i.e.  there is a sequence $a\in\R^\infty$ such that
+\[\text{for all } \eps > 0 \text{ there is a } M_\eps \text{ s. t. for all } k\geq M_\eps: \|a^{(k)} - a\|_\infty = \sup_n |a_n^{(k)} - a_n| < \eps, \]
+i.e. $a^{(k)}$ converges uniformly to $a$. \label{lem:Cauchy}
+\end{lemma}
+\begin{proof}
+We use completeness of $\R$ when we realize that by assumption for every $\eps > 0$ there is an index $N_\eps$ such that for every $n\in\N$ there is a limit $a_n$ such that for all $l \geq N_{\eps}$, 
+\[ |a_n^{(l)} - a_n| < \eps. \]
+Now we fix $\eps > 0$ and we want to bound $|a_n^{(k)}-a_n| < \eps$ for all $n\in\N$ by choosing $k$ large enough. For this, we write
+\begin{align*}
+|a_n^{(k)}-a_n| &\leq |a_n^{(k)}-a_n^{(l)}| + |a_n^{(l)} - a_n|
+\end{align*}
+Now first we choose $K = K_{\eps/2}$, $N = N_{\eps/2}$ and $l \geq \max\{K, N\}$. This makes the second part smaller than $\eps/2$. As soon as we choose $k\geq K$, the first part is also smaller than $\eps/2$. Hence we can choose $M_\eps = K_{\eps/2}$ and we are done.
+\end{proof}
+
+\begin{lemma}[$\overline{c_{00}}^{l^2} = l^2$]\label{lem:c00l2}
+Define $c_{00} = \{(a_n)_{n\in\N}: \exists m:~ \forall n\geq m:~ a_n = 0\}$ and choose a Cauchy sequence in $c_{00}$ w.r.t. the $l^2$-norm, i.e.
+\[\text{for all } \eps > 0 \text{ there is a } N_\eps \text{ s. t. for all } k,l\geq N_\eps: \sum_{n=1}^\infty |a_n^{(k)} - a_n^{(l)}|^2 < \eps.\]
+Then \[a^{(k)} \to a ~ \text{as a sequence in $l^2$}\]
+\end{lemma}
+\begin{proof}
+We need to show that there is a sequence $a$ with
+\begin{enumerate}
+\item $\|a^{(k)} - a\|_2 \xrightarrow{k\to\infty} 0$ and
+\item $a \in l^2.$
+\end{enumerate}
+The existence of such an $a$ follows immediately by dropping the summation symbol and using completeness of $\R$ to obtain a limit element $a_n$ for every $n\in \N$, which constitutes a sequence $a = (a_n)_{n\in\N}$.
+
+Now for 1.) we see that for any $R\in\N$
+\begin{align*}
+\sum_{n=1}^R |a_n^{(k)}-a_n|^2 &\leq  \sum_{n=1}^R 2\cdot |a_n^{(k)}-a_n^{(l)}|^2 + 2\cdot |a_n^{(l)}-a_n|^2.
+\end{align*}
+If we choose $l \geq M := M_{\sqrt\frac{\eps}{4\cdot R}}$ (the index from Lemma \ref{lem:Cauchy}), the second sum is bounded by $\eps/2$. After setting $N := N_{\sqrt{\frac{\eps}{4}}}$ and claiming additionally $k,l\geq N$ (thus $l\geq\max\{M,N\}$), we see that uniformly in $R$ we just need to set $k \geq N$ in order to bound 
+\[\sum_{n=1}^R |a_n^{(k)}-a_n|^2  < \eps \]
+and thus the bound also holds for the infinite sum, which proves 1.).
+
+For 2.) we see that 
+\begin{align*}
+\sum_{n=1}^R |a_n|^2 &\leq \sum_{n=1}^R 2 \cdot|a_n-a_n^{(k)}|^2 + 2\cdot | a_n^{(k)}|^2
+\end{align*}
+which is finitely bounded uniformly in $R$ as we can set $k$ such that the first sum is arbitrarily small and the second sum is some finite value (the $l^2$-norm of $a^{(k)}$.
+\end{proof}
 \end{document}
