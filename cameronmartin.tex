@@ -94,19 +94,38 @@ topline=false,bottomline=false,leftline=false,rightline=false, roundcorner=10pt]
 \title{The Hitchhiker's Guide to Cameron-Martin theory}
 \author{Philipp Wacker, FAU Erlangen-N\"urnberg}
 
+\usepackage{hyperref}
 \begin{document}
 \maketitle
-\begin{abstract}
-The theory of Gaussian measures in infinite dimensional vector spaces is a prerequisite for the theory of Bayesian inverse problems. 
-\end{abstract}
-\section{Gaussian measures in vector spaces}
 
-We take a Gaussian measure in a separable Banach space $X$ (or a separable \Frechet space). Recall that this means that for any linear functional $f\in X^*$, the evaluation $f(x)$ is a normal random variable on $\R$. We can define a mean and a covariance by setting
+\section{Introduction}
+The theory of Gaussian measures in infinite dimensional vector spaces is a prerequisite for both the theory of Bayesian inverse problems and general analysis and probability in infinite dimensions. It is also a fascinating subject in its own right but might initially seem austere and forbidding to the aspiring student (here the author (over-)generalizes his own experience). This document is supposed to serve as an appetizer and an introduction: A first course in functional analysis and probability theory should suffice in order to allow the reader to savour some of the lower-hanging fruit. The main goal of this summary is to build intuition for infinite-dimensional Gaussian measures and what pitfalls are there. This means that some of the proofs are only sketched, measure theory is not used and we will refer to more rigorous sources in the text.  This exposition relies heavily on two sources: The lecture notes of the 19th Internet seminar on Infinite dimensional analysis, \cite{Lunardi}, and Nate Eldredge's wonderful lecture notes on analysis and probability in infinite dimensions \cite{eldredge2016analysis}. I have stolen shamelessly from both notes, trying to combine the ideas from both treatises which helped me the most. This document deals only with a small fraction of both sources, i.e. the first few introductory chapters about infinite-dimensional probability measures.
+\ednote{Hinweis auf interessante Erklaerungen: Gauss in Hilbert spaces, Unterschied zwischen RKHS und Cameron-Martin space}
+\section{Gaussian measures in $\R^d$}
+A Gaussian measure $\gamma$ on $\R^d$ is a probability measure with characteristic function (Fourier transform)
+\[ \hat \gamma(f) := \int_{\R^d} e^{if^Tx}\gamma(\de x) = \exp\left\{i\cdot f^Ta - \frac{1}{2}f^T\Sigma f\right\} \]
+for some $m\in\R^d$ (we call this the mean) and $\Sigma \in\R^{d\times d}$ symmetric and positively semi-definite (we call this the covariance matrix). In short, $\gamma = N(m, \Sigma)$. 
+We can also obtain mean and covariance by integration:
+\[ m = \int_{\R^d} x \, \gamma(\de x),\quad \text{or } f^Tm = \int_{\R^d} f^T x \, \gamma(\de x) \text{ for } f\in\R^d \]
+and 
+\[ \Sigma = \int_{\R^d} (x-m)\cdot (x-m)^T \, \gamma(\de x), \quad \text{or } f^T\Sigma g = \int_{\R^d}f^T(x-m) \cdot g^T(x-m)\, \gamma(\de x). \]
+
+The latter definitions in each of the last two expressions allow indirect calculation of $m$ and $\Sigma$ by ``testing'' with suitable $f,g\in \R^d$. The best method for that is choosing $f=(1,0,\ldots, 0)=e_1$, then $f = (0, 1, 0, \ldots, 0)=e_2$ etc. when calculating $f^Tm$ and all combinations for $f$ and $g$ for the calculation of $f^T\Sigma g$ and then $m = (e_1^Tm, e_2^Tm,\ldots, e_d^T m)$ and $\Sigma = (\Sigma_{i,j})_{i,j=1}^d$ with $\Sigma_{i,j} = e_i^T\Sigma e_j$. 
+
+It may look strange to calculate mean and variance in that way if there is an explicit formula for $m$ and $\Sigma$ themselves, but the ``testing method'' generalizes more easily to infinite dimensions without the use of Bochner integrals (note that the expressions for $m$ and $\Sigma$ are actually vector-valued and matrix-valued)!
+
+In finite dimensions we have an expression for the density of the measure with respect to the Lebesgue measure on $\R^d$ if $\Sigma$ is non-singular:
+\[ \frac{\de \gamma}{\de\lambda}(x) = \frac{1}{\sqrt{(2\pi)^d \det \Sigma}}\exp\left\{- \frac{x^T\Sigma^{-1}x}{2}\right\}. \]
+This is nice for calculations in finite dimensions but completely worthless in the context of infinite dimensions as there is no analogue of Lebesgue measure there. So better forget this immediately and focus on the characterization via its Fourier transform. Another definition that generalizes easily to the infinite-dimensional case is via projection on one component: Given any $f\in\R^d$, a vector $x\in\R^d$ is distributed according to a Gaussian measure if and only if $f^T x$ is a one-dimensional Gaussian measure with mean $f^Tm$ and variance $f^T\Sigma f$.
+\section{Gaussian measures in vector spaces}
+Let $X$ be a topological vector space (think of a Banach space -- or a \Frechet space if you're feeling adventurous). A Gaussian measure is a probability measure on $X$ if and only if for each continuous linear functional $f\in X^*$ the push-forward measure $\gamma \circ f^{-1}$ is a Gaussian measure on $\R$.
+
+We can define a mean and a covariance by setting
 \begin{itemize}
 \item $a_\gamma(f) = \int_X f(x)\gamma(\de x)$, so $a_\gamma: X^*\to \R$, and hence $a_\gamma \in (X^*)'$.
 \item $B_\gamma(f, g) = \int_X [f(x) - a_\gamma(f)]\cdot [g(x)-a_\gamma(g)]\gamma(\de x)$, so $B_\gamma \in (X^*\times X^*)'$.
 \end{itemize}
-So far we only know that $a_\gamma$ is a linear map from $X^*$ (the so-called topological dual) to $\R$, i.e. $a_\gamma$ is an element of the ``algebraical dual of the topological dual'', because we don't know yet whether $a_\gamma$ is continuous (i.e. bounded). The exponential Gaussian moments we obtain from Fernique's theorem prove exactly this,\ednote{insert Fernique} and thus actually $a_\gamma \in X^{**}$. This is still kind of impractical: We can interpret $a_\gamma(f)$ as the mean of the measure ``in direction of $f$'', so we would like to view $a_\gamma$ as the ``general mean'' of the measure. But we think of the mean as an object in the probability space (think of sampling from a measure; the empirical mean will lie in the same space $X$ as the samples), but here we can only state $a_\gamma \in X^{**}$. Because $X \subsetneq X^{**}$, we need to do some work in order to identify $a_\gamma$ with an actual element in $X$. \ednote{Insert proof for $a_\gamma \in X$}
+So far we only know that $a_\gamma$ is a linear map from $X^*$ (the so-called topological dual) to $\R$, i.e. $a_\gamma$ is an element of the ``algebraical dual of the topological dual'', because we don't know yet whether $a_\gamma$ is continuous (i.e. bounded). The exponential Gaussian moments we obtain from Fernique's theorem prove exactly this, and thus actually $a_\gamma \in X^{**}$. This is still kind of impractical: We can interpret $a_\gamma(f)$ as the mean of the measure ``in direction of $f$'', so we would like to view $a_\gamma$ as the ``general mean'' of the measure. But we think of the mean as an object in the probability space (think of sampling from a measure; the empirical mean will lie in the same space $X$ as the samples), but here we can only state $a_\gamma \in X^{**}$. Because $X \subsetneq X^{**}$, we need to do some work in order to identify $a_\gamma$ with an actual element in $X$. 
 
 \mybox[gray!20]{
 \subsection*{What's the deal with $X\subsetneq X^{**}$?}
@@ -118,7 +137,7 @@ Every $x\in X$ can also be interpreted as an object in $X^{**}$ in the following
 In general, $J$ is not surjective, i.e. $X \subsetneq X^{**}$. By common laziness, we like to identify $x\in X$ with $J(x) = \phi_x\in X^{**}$ and just use the notation $x \in X^{**}$. This leads to confusing looking terms like $f(x) = x(f)$ for $f\in X^*$ (especially later when we talk about the map $R_\gamma$). We need to keep in mind how this is to interpreted.
 \subsection*{When is an element $\phi\in X^{**}$ also in $X$?}
 We established that $X$ is a proper subset of $X^{**}$, so we can't expect to be able to find an element $x_\phi\in X$ for any $\phi \in X^{**}$ such that $\phi(f) = f(x_\phi)$ for any $f\in X^*$ (note that we have reversed the notation as we are looking for $x$ given $\phi$). There is a powerful criterion when this is actually true:
-\begin{prop}
+\begin{prop}\label{prop:weakstar}
 Let $\phi : X^*\to \R$ be a linear functional, i.e. $\phi\in (X^*)'$. If $\phi$ is continuous for the weak* topology, there exists a $x_\phi\in X$ such that for all $f\in X^*$
 \[\phi(f) = f(x_\phi).\]
 \end{prop}
@@ -129,7 +148,22 @@ Let $\phi : X^*\to \R$ be a linear functional, i.e. $\phi\in (X^*)'$. If $\phi$ 
 \end{itemize}
 The main point to take away from this proposition is that any linear functional $\phi : X^{*}\to \R$ on a separable Banach space $X$ has a corresponding $x_\phi\in X$ if it is sequentially weak*-continuous, which is just a fancy way of saying that for any pointwise converging sequence $(f_n)\subset X^*$, i.e. $f_n(x) \to f(x)$, we also have $\phi(f_n) \to \phi(f)$. \textbf{In all our applications here, $\phi$ will be an integral operator and we can show this criterion by integral convergence theorems like the dominated convergence theorem.}  
 }
-
+A main theorem when working with Gaussian measures on Banach spaces is Fernique's theorem which provides bounds for all polynomial moments. The proof is not too difficult but quite technical and so we will not write it here.
+\begin{theorem}\label{thm:fernique}
+Let $\gamma$ be a Gaussian measure on a separable Banach space $X$. Then there is an $\alpha > 0$ such that
+\[\int_X \exp\left\{\alpha \|x\|^2\right\}\,\gamma(\de x) < \infty. \]
+\end{theorem}
+Now we're ready to prove that\footnote{or rather that for a given $\gamma$, there is an element $a\in X$ such that $a_\gamma\in X^{**}$ and $a\in X$ correspond in the sense $a_\gamma(f) = f(a)$.} $a_\gamma \in X$.
+\begin{lemma}\label{lem:agamma}
+Let $X$ be a separable Banach space and $\gamma$ a Gaussian measure on $X$. Then $a_\gamma \in X$.
+\end{lemma}
+\begin{proof}
+$a_\gamma$ is an element of $(X^*)'$ (and actually $X^{**}$, but we won't need this explicitly). From proposition \ref{prop:weakstar} we know that we only need to prove that $a_\gamma$ is weak-*-continuous. Separability of $X$ means that sequential weak-*-continuity is actually enough. Hence we need to prove that for any $f_n \stackrel{*}{\rightharpoonup} f$, i.e. $f_n(x)\to f(x)$ for any $x\in X$, 
+\[ a_\gamma(f_n) \to a_\gamma(f). \]
+As $X\subsetneq X^{**}$, this is not true in general, but the special structure of $a_\gamma$ as a Lebesgue integral functional (and hence we can use the Lebesgue dominated convergence theorem) and the good integrability properties of Gaussian measures -- courtesy of Fernique's theorem -- help us out. First we realize that any weak-*-convergent sequence is bounded, hence $\sup_n\|f_n\|_{X^*}  \leq C$. Then pointwise convergence of $f_n$ and 
+\[ |a_\gamma(f_n)| \leq \int_X \|f_n\|_{X^*} \|x\|\,\gamma(\de x) \leq C \int_X \|x\|\,\gamma( \de x) < C' \]
+where the last bound follows from Theorem \ref{thm:fernique}. Then Lebesgue's dominated convergence theorem immediately yields the result.
+\end{proof}
 \myboxtwo{\subsection*{Example \circled{1}: Mean and Covariance in finite dimensions}
 Take a multivariate Gaussian in $d$ dimensions, i.e. $\gamma = N(m, \Sigma)$ with $m\in\R^d$ and $\Sigma\in\R^{d\times d}$. Then linear functionals $f\in X^*$ can be interpreted as $\R^d$ vectors, with $f(x) = f^Tx$. Then 
 \[a_\gamma(f) = \int_{\R^d}f^Tx \, \gamma(\de x) = f^T m.\] By the duality voodoo explained above, although $a_\gamma \in X^{**}$ (technically), we can say $a_\gamma\in X$ by identifying $a_\gamma(f) = f(a_\gamma) = f^T a_\gamma$, so actually $a_\gamma = m$ as expected and $a_\gamma(f) = f^Tm$. One has to be careful not to mix up $a_\gamma$ (the mean of the Gaussian) and $a_\gamma(f)$ (the mean of the Gaussian in direction $f$). This is even more true in the general Banach space setting.
@@ -156,7 +190,7 @@ p\\q
 \end{align*}
 for $f\in X^*=\R^2$ or more succinctly $a_\gamma = (p,q)^T$. With another $g\in X^*=\R^2$
 \begin{align*}
-B_\gamma(f,g) &= \int_\R\int_\R f^T (f_1,f_2)\begin{pmatrix}
+B_\gamma(f,g) &= \int_\R\int_\R  (f_1,f_2)\begin{pmatrix}
 x_1-p\\x_2-q
 \end{pmatrix}\cdot (g_1,g_2)\begin{pmatrix}
 x_1-p\\x_2-q
@@ -176,12 +210,12 @@ f &\mapsto f - a_\gamma(f)
 \end{align*}
 is continuous. 
 The image of $j$ is not closed in the $L^2$ topology, so we define:
-\[ X_\gamma^* = \overline{j(X^*)}^{L^2(X,\gamma)} \text{ is called the reproducing kernel Hilbert space \footnotemark},\]\footnotetext{for reasons explained in the next section}
+\[ X_\gamma^* = \overline{j(X^*)}^{L^2(X,\gamma)} \text{ is called the reproducing kernel Hilbert space \footnotemark},\]\footnotetext{for reasons explained in remark \ref{rem:RKHS}}
 i.e. $X_\gamma^*$ consists of all $L^2$-limits of sequences of the form $(f_n-a_\gamma(f_n))_n$, with $f_n\in X^*$. \ednote{Characterize $X_\gamma^*$ further: All Gaussian random variables?}
 
 This is a definition one easily glances over but there are a few subtleties here that should be pointed out:
 \begin{itemize}
-\item Although each $f\in X^*$ is also a $f\in L^2(X, \gamma)$ (and by extension, $f-a_\gamma(f)\in X_\gamma^*$), there is quite a difference in viewing $f$ as a linear functional in $X^*$ or a square-integrable random variable: The main point is that two ``directions'' $f_1$, $f_2$ that differ only by a component that is degenerate (i.e. the measure puts no mass along this axis) are \textit{different} objects in $X^*$, but identical as elements in $L^2(X,\gamma)$. Take for example the degenerate Gaussian measure $\delta_0 \otimes N(0,1)$ in two dimensions: Here, $f_1(x) = x_1+x_2$ and $f_2(x) = x_2$ are definitely not the same functional, but as random variables they are identical, because $x_1 = 0$ a.s.
+\item Although each $f\in X^*$ is also a $f\in L^2(X, \gamma)$ (and by extension, $f-a_\gamma(f)\in X_\gamma^*$), there is quite a difference in viewing $f$ as a linear functional in $X^*$ or a square-integrable random variable: The main point is that two ``directions'' $f_1$, $f_2$ that differ only by a component that is degenerate (i.e. the measure puts no mass along this axis) are \textit{different} objects in $X^*$, but identical as elements in $L^2(X,\gamma)$. Take for example the degenerate Gaussian measure $\delta_0 \otimes N(0,1)$ in two dimensions: Here, $f_1(x) = x_1+x_2$ and $f_2(x) = x_2$ are definitely not the same functional, but as random variables they are identical, because $x_1 = 0$ a.s. This amounts to the fact that $\|f_1-f_2\|_{X^*} = 1$ but $\|f_1-f_2\|_{L^2(X,\gamma)} = 0$.
 \item While $f\in X^*$ is a linear functional (i.e. specifically $f(0)=0$), $j(f)$ isn't anymore, but is is rather an affine functional because its mean has been subtracted. On the other hand, $j(f)$ has zero mean, while this is generally not true for $f\in X^*$. This reasoning holds identically for elements $g\in X_\gamma^*$: By definition, $a_\gamma(g) = 0$, but $g(0)\neq 0$ in general. One has to be careful not to mix up those two ideas of ``going through the origin''.
 \item By using the covariance inner product $\langle f, g\rangle_{L^2(X, \gamma)} = B_\gamma(f, g) = \int_X [f(x) - a_\gamma(f)]\cdot [g(x)-a_\gamma(g)]\gamma(\de x)$, we obtain a Hilbert space structure in the image of $j$. This will be of great use later. 
 \end{itemize}
@@ -199,7 +233,7 @@ Let $\gamma =  \bigotimes_{j\in\N} N(0,1)$. As linear functionals are represente
 }
 \myboxtwo{
 \subsection*{Example \circled{3}: $X_\gamma^*$ for a degenerate Gaussian in 2-d}
-For, $\gamma = \delta_p \otimes N(q, \sigma^2)$ we established that $X^* = \R^2$. The space $X_\gamma^*$ now consists of linear functionals which are shifted by their mean, i.e. as in Example \circled{1} above if we set $m = (p,q)^T$ and $\Sigma = \operatorname{diag}(0,\sigma^2)$. \ednote{AAARGH FEHLER: Aufpassen auf Degenerierung! Da geht die Einbettung $X^*\to L^2$ kaputt!}
+For, $\gamma = \delta_p \otimes N(q, \sigma^2)$ we established that $X^* = \R^2$. The space $X_\gamma^*$ now consists of linear functionals which are shifted by their mean, i.e. as in Example \circled{1} above if we set $m = (p,q)^T$ and $\Sigma = \operatorname{diag}(0,\sigma^2)$: For any $f\in \R^2$, $j(f) = f_1(x_1-p) + f_2(x_2-q)$ and $X_\gamma^* = j(X^*)\subset L^2(X,\gamma)$ (we don't need the $L^2$ completion in finite dimensions). Note that $j(X^*)$ \emph{looks} 2-dimensional (as we have two parameters, $f_1$ and $f_2$) but this is spurious: Any two $f, g$ that only differ by their  first component, i.e. $f-g = (c, 0)$ have $j(f)$ and $j(g)$ lying in the same $L^2$ equivalence class, i.e. $j(f)-j(g) = j(f-g) = 0\in L^2(X,\gamma)$.
 }
 By $L^2$ continuity, $a_\gamma$, $\hat \gamma$ and $B_\gamma$ can be extended with their domains changed: For any $X^*$ we can also use elements from $X_\gamma^*$, while for $g\in X_\gamma^*$, $a_\gamma(g) = 0$, $\hat \gamma(f) = \exp\{-\frac{1}{2}\|f\|_{L^2(X,\gamma)}\}$ and $B_\gamma(g_1, g_2) = \int_X g_1(x)g_2(x)\gamma(\de x)$ for $g_1,g_2\in X_\gamma^*$. Note that $X_\gamma^*$ is not a superset of $X^*$ because its elements all need to be centred (as random variables, i.e. $a_\gamma(f) = 0$ for $f\in X_\gamma^*$.
 
@@ -211,14 +245,24 @@ We set
 R_\gamma : X_\gamma^* & \to (X^*)'\\
 R_\gamma f (g) &= \int_X f(x) [g(x)-a_\gamma(g)]\gamma(\de x)
 \end{align*}
+\begin{remark}
 A few notes on the definition of $R_\gamma$:
 \begin{itemize}
-\item Note that $R_\gamma f \in (X^*)'$, but we want it to be in $X$. This will work along the same lines as the proof that $a_\gamma\in X$ above.
+\item Note that $R_\gamma f \in (X^*)'$, but we want it to be in $X$. This will work along the same lines as the proof that $a_\gamma\in X$ above. We record this in lemma \ref{lem:Rgamma}
 \item This functional is very closely related to the covariance inner product $B_\gamma$ (which is the $L^2(X, \gamma)$ inner product). Actually, $R_\gamma f_1 (f_2) = B_\gamma (f_1, f_2)$ for $f_1, f_2\in X_\gamma^*$ (or $R_\gamma f|_{X_\gamma^*} = B_\gamma(f, \cdot)|_{X_\gamma^*}$). The map $R_\gamma$ can be thought of as an asymmetric version of $B_\gamma$ where we straddle ``input'' from $X_\gamma^*$ and $X^*$.
 \item $R_\gamma$ needs two inputs (i.e. $f\in X_\gamma^*$ and $g\in X^*$) to be actually explicitly computable, but we will consider the map only with the argument $f$, i.e. as it is stated as a map $X_\gamma^* \to (X^*)'$ (where the parameter $g$ is ``invisible''). We only care about what $R_\gamma$ does with an $f\in X_\gamma^*$.
 \item  We don't need to subtract the mean of $f$ (as it is done with $g$) because $f$ has already mean $0$ just by being in $X_\gamma^*$.
 \end{itemize}
- \ednote{insert proof $R_\gamma: X_\gamma^*\to X$}
+\end{remark}
+\begin{lemma}\label{lem:Rgamma}
+$R_\gamma$ can be represented as a map into $X$, i.e. for any $f\in X_\gamma^*$ there is an element $r\in X$ such that for all $g\in X^*$
+\[R_\gamma f(g) = g(r)\]
+or (for brevity)
+\[R_\gamma f(g) = g(R_\gamma f).\]
+\end{lemma}
+\begin{proof}
+This is proven almost identically to lemma \ref{lem:agamma}.
+\end{proof}
 
 As $R_\gamma$ can be interpreted as a map $X_\gamma^* \to X$, we can identify $R_\gamma f$ with an element $r_f\in X$ such that 
 \begin{equation}\label{eq:reconstructingkernel}
@@ -227,9 +271,7 @@ As $R_\gamma$ can be interpreted as a map $X_\gamma^* \to X$, we can identify $R
 but for simplicity we will more sloppily identify $R_\gamma f$ with $r_f$ and write
 \[ R_\gamma f(g) = g(R_\gamma f).\]
 
-A note on \eqref{eq:reconstructingkernel}: This is a remarkable statement native to the theory of \textit{reconstructing kernels}: It basically means that we can reconstruct the value of $g\in X^*$ in the point $r_f$ by evaluating the integral on the left hand side. The function $f\in X_\gamma^*$ plays the role of the so-called reconstructing kernel, i.e. the function with which $g$ has to be integrated against. It is for this reason that $X_\gamma^*$ is also called the reconstructing kernel Hilbert space (RKHS) in the literature. 
-\mybox{\subsection*{RKHSs}
-\ednote{Graue Box für RKHSs? Also Fourier, Sobolev etc.}}
+
 
 The most important thing of this section is at its end: We define the Cameron-Martin space\footnote{DaPrato/Zabczyk call $H$ the reconstructing kernel Hilbert space (RKHS), a notation we have reserved for $X_\gamma^*$ (and which remains unnamed in DBZ)} $H$ as the image of $R_\gamma$. We put this in a displayed equation to stress its importance.
 \begin{displaymath}
@@ -239,22 +281,103 @@ $R_\gamma$ is not onto, so $H\subsetneq X$. There are several senses in which $H
 
 There is an important equivalent characterization for the Cameron-Martin space $H$ which many authors choose as its definition:
 \begin{prop}
-Define $|h|_H = \sup\{f(h): f\in X^*, \|j(f)\|_{L^2(X, \gamma)} \leq 1\}$, the evaluation norm of $h\in X$. Then the following two statements are equivalent:
-\begin{itemize}
+Define $|h|_H = \sup\{f(h): f\in X^*, \|j(f)\|_{L^2(X, \gamma)} \leq 1\}$\ednote{Rolle dieser Norm herausstellen: fuer $f\in X^*$ mit $\|f\|_{X^*}$ diese Einsetzungsnorm waere einfach die Norm von $h$ aber es wird interessant, wenn wir den Bereich der $f$s ueber die $L^2$-Norm steuern}, the evaluation norm of $h\in X$. Then the following two statements are equivalent:
+\begin{enumerate}
 \item $h\in H$, i.e. $h = R_\gamma \hat h$.
 \item $|h|_H < \infty$.
-\end{itemize}
-Also, if $h\in H$ (and thus both conditions are true), $|h|_H = |\hat h|_{L^2(X,\gamma)}$. This means that $R_\gamma: X_\gamma^* \to H$ is an isometry, rendering $H$ a Hilbert space  with inner product $\langle h, k\rangle_H = \langle \hat h, \hat k\rangle_{L^2(X,\gamma)}$ for $h = R_\gamma \hat h, k = R_\gamma \hat k$.
+\end{enumerate}
+Also, if $h\in H$ (and thus both conditions are true), $|h|_H = \|\hat h\|_{L^2(X,\gamma)}$. This means that $R_\gamma: X_\gamma^* \to H$ is an isometry, rendering $H$ a Hilbert space  with inner product $\langle h, k\rangle_H = \langle \hat h, \hat k\rangle_{L^2(X,\gamma)}$ for $h = R_\gamma \hat h, k = R_\gamma \hat k$.
 \end{prop}
 This means that $H = \{h\in X: |h|_H < \infty\}$ (which is a definition often used in the literature).
-\ednote{Insert proof for prop}
+\begin{proof}
+We show that (1.) $\Rightarrow$ (2.) and assume that $H\ni h = R_\gamma \hat h$ for some $\bar h\in X_\gamma^*$. We want to show that the $H$-norm is finite. Indeed, we recall that $h = R_\gamma \hat h$ is actually the short form of $f(h) = R_\gamma \hat h (f)$ for any $f\in X^*$ and thus
+\begin{align*}
+f(h) &= R_\gamma \hat h (f) = \int_X \hat h(x) \cdot [f(x)-a_\gamma(f)]\, \gamma(\de x) = \int_X \hat h(x) \cdot j(f)(x)\, \gamma(\de x)\\
+&\leq \|\hat h\|_{L^2(X,\gamma)}\cdot \|j(f)\|_{L^2(X,\gamma)},
+\end{align*}
+which means that 
+\begin{align*}
+|h|_H &= \sup\{f(h): f\in X^*, \|j(f)\|_{L^2(X, \gamma)} \leq 1 \}\\
+&\leq \|\hat h\|_{L^2(X,\gamma)} < \infty.
+\end{align*}
+For (2.) $\Rightarrow$ (1.) we define for a given $h\in X$ with $|h|_H < \infty$ the evaluation functional
+\[ L_h: j(X^*) \to \R,~ j(f) \mapsto f(h). \]
+The first issue we need to address is well-definedness: As $j$ is not an one-to-one mapping, there might exist $f_1, f_2\in X^*$ with $j(f_1) = j(f_2)$ and possibly $f_1(h) \neq f_2(h)$. This is impossible, though, as for a given $f\in X^*$
+\begin{equation}\label{eq:Lh}
+|L_h(j(f))| = |f(h)| \leq |h|_H \cdot \|j(f)\|_{L^2(X,\gamma)}
+\end{equation}
+and hence for a pair $f_1,f_2\in X^*$ with $j(f_1) = j(f_2)$ (i.e. $j(f_1-f_2) = 0$), we obtain $|f_1(h)-f_2(h)| = |(f_1-f_2)(h)| \leq |h|_H \cdot \|j(f_1-f_2)\|_{L^2(X,\gamma)} = 0$.
+Another consequence of \eqref{eq:Lh} is $L^2(X,\gamma)$-continuity and thus we can extend $L_h$ continuously to a (continuous linear) map $L_h: X_\gamma^*\to \R$. As $X_\gamma^*$ is a Hilbert space and $L_h \in (X_\gamma^*)^*$, Riesz' representation theorem shows the existence of an element $\hat h\in X_\gamma^*$ such that 
+\begin{equation}\label{eq:reconLhrep}
+L_h(\phi) = \langle \hat h, \phi\rangle_{L^2(X,\gamma)} = \int_X \hat h(x)\cdot \phi(x)\,\gamma(\de x)
+\end{equation} 
+and in particular for any $f\in X^*$ (and thus $j(f)\in X_\gamma^*$):
+\begin{equation}\label{eq:reconLh}
+f(h) = L_h(j(f)) = \int_X \hat h(x)\cdot j(f)(x)\,\gamma(\de x) = R_\gamma \hat h(f) = f(R_\gamma \hat h) 
+\end{equation}
+
+where the last equality is to be understood in the usual duality sense. As the equation $f(h) = f(R_\gamma \hat h)$ is true for any $f\in X^*$, we obtain 
+\[ h = R_\gamma\hat h \]
+and by definition of $H$, that $h\in H$.
+
+It remains to show that $|h|_H = \|\hat h\|_{L^2(X,\gamma)}$ if any (and thus both) of the equivalent conditions hold. Indeed, for $h = R_\gamma \hat h \in H$, from \eqref{eq:reconLh}
+\begin{align*}
+\sup\{f(h): f\in X^*, \|j(f)\|_{L^2(X,\gamma)}\leq 1\} &= \sup\left\{\langle \hat h, j(f) \rangle_{L^2(X,\gamma)}:\, f\in X^*, \|j(f)\|_{L^2(X,\gamma)}\leq 1\right\}\\
+&= \sup\left\{\langle \hat h, \phi\rangle_{L^2(X,\gamma)}:\, \phi\in X_\gamma^*\right\} = \|\hat h\|_{L^2(X, \gamma)}
+\end{align*}
+where the step from the first to the second line is valid as $j(X^*)$ is dense in $X_\gamma^*$.
+\end{proof}
+\begin{remark}\label{rem:RKHS}
+Note that \eqref{eq:reconLhrep} identifies the evaluation map $L_h$ with the element $\hat h \in X_\gamma^*$. This is the reason for $X_\gamma^*$ being called``reconstructing kernel Hilbert space'': The element $\hat h$ is the (integral) kernel which reconstructs the value of $f$ in $h$:
+\[ f(h) = \langle \hat h, f\rangle_{L^2(X,\gamma)}.\]
+It is truly remarkable that we are able to evaluate $f$ pointwise by alternatively integrate $f$ over the kernel $\hat h$.
+\end{remark}
+\mybox{\subsection*{Reconstructing kernel Hilbert spaces}
+This exposition is borrowed from \cite{paulsen2016introduction}. 
+\begin{definition}
+A vector subspace of functions $\mathcal H = \{f:D\to \R\}$  on some domain $D$ is called a reconstructing kernel Hilbert space (RKHS) if
+\begin{itemize}
+\item $\mathcal H$ is a Hilbert space with some inner product $\langle\cdot\rangle$ and
+\item For any $y\in D$, the evaluation functional $L_y: \mathcal H \to \R,~ f\mapsto f(y)$ is bounded.
+\end{itemize}
+\end{definition}
+\begin{remark}
+Because $\mathcal H$ needs to be a vector space of functions, any Lebesgue space cannot be an RKHS (because $L^p$ functions are actually equivalence classes of functions). This makes sense as pointwise evaluation is not well-defined for those functions.
+\end{remark}
+As every linear, bounded functional corresponds to an element in the Hilbert space, there is a $k_y\in \mathcal H$ such that $L_y(f) = \langle k_y, f\rangle$. As $k_y(x) = \langle k_x, k_y\rangle = \langle k_y, k_x\rangle = k_x(y)$, this constitutes a  symmetric kernel with a remarkable property:
+\begin{definition}
+Given an RKHS $\mathcal H$, the symmetric kernel $K:D\times D\to\R,~ K(x,y) = k_y(x)$ is called the \textit{reconstructing kernel}. In this notation, it holds that for any $f\in \mathcal H$,
+\[ f(y) = \langle K(\cdot, y), f\rangle. \]
+\end{definition}
+\paragraph{$H_0^1$ as an RKHS:}
+Consider $H_0^1 = \{f\in L^2([0,1]): ~ Df\in L^2([0,1]), f(0)=f(1)=0\}$ where $Df$ is the weak derivative\footnote{and the zero Dirichlet conditions are to be interpreted in the usual sense, i.e. $H_0^1=\overline{C_c^\infty( [0,1])}^{H^1([0,1])}$ }. This is an RKHS with kernel 
+\[K(x,y) = \begin{cases}x(1-y) & \text{ for } x\leq y\\(1-x)y & \text{ for } x > y\end{cases}.\]
+By standard theory, $H_0^1$ is a Hilbert space with inner product $\langle f, g\rangle = \int_0^1 f'(t)g'(t)\de t$. Evaluation is bounded, as
+\begin{align*}
+|f(y)| = \left|\int_0^y f'(t) \de t\right| = \left|\int_0^1 f'(t) \chi_{[0,y]}(t)\d t\right| \leq \langle f,f\rangle.
+\end{align*}
+Thus, $H_0^1$ is an RKHS with the reconstruction property. This is also easily checked:
+\begin{align*}
+\langle f, K(y, \cdot)\rangle = \int_0^y f'(x) (1-y)\de x + \int_y^1 f'(x) (-y)\de x = f(y).
+\end{align*}
+\paragraph{The space of band-limited functions as an RKHS}
+With\footnote{from \url{https://en.wikipedia.org/wiki/Reproducing_kernel_Hilbert_space}} the Fourier transform $\hat f(\omega) = \int f(x) e^{-i\omega x}\de x$ of some $f\in \{f\in L^2(\R)\}$, the vector space $\mathcal H = : \{f\in L^2(\R):\operatorname{supp}(\hat f)\subset [-a,a]\}$ is an RKHS with kernel $K(x,y) = \frac{\sin(a[y-x])}{\pi[y-x]}$. That $\mathcal H$ with the $L^2$ inner product is an RKHS can be seen from 
+\begin{align*}
+|f(y)| = \frac{1}{2\pi} \int_{-a}^a \hat f(\omega) e^{i\omega y} \de \omega \leq \sqrt{\frac{a}{\pi}}\cdot \|\hat f\|_{L^2(\R)} = \sqrt{\frac{a}{\pi}}\cdot \|f\|_{L^2(\R)}.
+\end{align*}
+That $K$ is actually the reconstructing kernel can be intuitively understood as $K$ is the ``bandlimited Dirac''. Indeed $\lim_{a\to\infty} K(x,y) = \delta_y(x)$ (in the sense of distributions), this makes sense as $f(y) = \int f(x) \delta_y(x)\de x$, but the problem here is that the evaluation is not bounded for non-bandlimited functions, so we need $a<\infty$. 
+
+}
 \myboxtwo[blue!20]{
 \subsection*{Example \circled{1}: $R_\gamma$ in finite dimensions}
-For a multivariate Gaussian $N(m, \Sigma)$ with $m\in\R^d$ and $\Sigma \in \R^{d\times d}$, the map $R_\gamma$ is simply 
+For a multivariate Gaussian $N(m, \Sigma)$ with $m\in\R^d$ and $\Sigma \in \R^{d\times d}$ invertible, the map $R_\gamma$ is simply 
 \begin{align*}
 R_\gamma : X_\gamma^* &\to \R^d\\
 (x\mapsto f^T \cdot (x-m)) &\mapsto \Sigma \cdot f.
 \end{align*}
+In particular,
+\[ H = \operatorname{ran} R_\gamma = \R^d \]
+as $\Sigma$ is invertible and thus surjective.
 For the form of elements in $X_\gamma^*$ read the blue box on this topic in case you don't remember. \ednote{Interpretation?} The inverse $\R_\gamma^{-1}$ is then (in the case where $\Sigma$ is invertible)
 \begin{align*}
 R_\gamma^{-1}: \R^d &\to X_\gamma^*\\
@@ -287,11 +410,12 @@ R_\gamma: X_\gamma^* &\to \R^2\\
 \end{align*}
 The image of $R_\gamma$ (the Cameron-Martin space) is $\{0\}\times \R = H$ and the inverse of $R_\gamma$ is
 \begin{align*}
-R_\gamma: H &\to X_\gamma^*\\
+R_\gamma^{1}: H &\to X_\gamma^*\\
 \begin{pmatrix}
 0\\f_2
-\end{pmatrix} & \mapsto  \frac{f_2(x_2-q)}{\sigma^2}
+\end{pmatrix} & \mapsto  \frac{f_1(x_1-p) + f_2(x_2-q)}{\sigma^2}
 \end{align*}
+where $f_1$ is arbitrary because any value $f_1\in\R$ will yield the same element in $X_\gamma^*$ because they will have the same value $\gamma$-almost-surely.
 }
 
 \section{Shifts of Gaussian measures}
@@ -299,10 +423,11 @@ The main point of the Cameron-Martin theory is dealing with shifts of Gaussian m
 \[\gamma_h(B) = \int_B \rho_h(x) \gamma(\de x),\]
 or symbolically, $\frac{\de \gamma_h}{\de \gamma}(x) = \rho_h(x)$.
  There are two difficulties with this ``relative density'': The first problem arises when we try to shift in directions in which the measure $\gamma$ is degenerate. In this case, we transport our probability mass to an area which had zero probability mass, and thus formally $\frac{\de \gamma_h}{\de \gamma}(x) = \mlq\mlq\frac{C}{0}\mrq\mrq$ and we cannot expect to get a density. 
- The second issue only arises in infinite dimension and is most intuitively explained with looking at the measure $\otimes_{n=1}^J N(0,1)$ with $J\to \infty$ \ednote{Beispiel einfügen}
+ The second issue only arises in infinite dimension and is most intuitively explained with looking at the measure $\otimes_{n=1}^J N(0,1)$ with $J\to \infty$.
+ We start with our non-degenerate example in finite dimensions as this is illustrative for the general theory:
 \myboxtwo{
-\subsection*{Gaussian Shifts in finite dimensions}
-We take a non-degenerate Gaussian in $d$ dimensions, i.e. $\gamma = N(m, \Sigma)$ with $\Sigma\in \R^{d\times d}$ non-singular. Define $\gamma_h$ as $\gamma_h(\cdot) = \gamma(\cdot - h)$ and then
+\subsection*{Example \circled{1}: Gaussian Shifts in finite dimensions}
+We take a non-degenerate Gaussian in $d$ dimensions, i.e. $\gamma = N(m, \Sigma)$ with $\Sigma\in \R^{d\times d}$ non-singular. Define $\gamma_h$ as $\gamma_h(\cdot) = \gamma(\cdot - h)$ and then (by elementary multivariate Gaussian wizardry or the help of a Computer algebra system)
 \begin{displaymath}
 \frac{\de \gamma_h}{\de \gamma}(x) = \exp\left\{h^T\Sigma^{-1}(x-m) - \frac{1}{2}h^T\Sigma^{-1}h\right\} = \exp\left\{(R_\gamma^{-1}(h))(x) - \frac{1}{2}|h|_H^2\right\},
 \end{displaymath}
@@ -314,25 +439,110 @@ The following lemma is useful:
 Take a Gaussian measure $\gamma$ and a $g\in X_\gamma^*$. Recall that the characteristic function of $\gamma$ is $\hat \gamma(f) = \exp(ia_\gamma(f) - \|j(f)\|_{L^2(X, \gamma)}^2/2)$, signifying that $a_\gamma$ is the mean and $B_\gamma(f, g) = \int_X j(f)(x)j(g)(x)\gamma(\de x)$ is the covariance form. Then the measure given by
 \[\frac{\de\mu_g}{\de \gamma}(x) = \exp\left\{g(x)-\frac{1}{2}\|g\|_{L^2(X,\gamma)}\right\}\]
 is a Gaussian probability measure with characteristic function
-\[\hat\mu_g(f) = \exp\left\{i[a_\gamma(f) + R_\gamma g(f)]-\frac{1}{2}\|j(f)\|_{L^2(X,\gamma)}\right\},\]
+\[\hat\mu_g(f) = \exp\left\{i[a_\gamma(f) + R_\gamma g(f)]-\frac{1}{2}\|j(f)\|_{L^2(X,\gamma)}^2\right\},\]
 i.e. is the Gaussian measure with the same covariance structure as $\gamma$ but with mean shifted by $R_\gamma g$. We can think of the mean as the object $a_\gamma + R_\gamma g$.
 \end{lemma}
 \begin{proof}[Sketch of proof]
-\ednote{Einfuegen}
+We show that the characteristic function of $\mu_g$ has the form as stated. We do the following formal calculation for $f\in X^*$:
+\begin{align*}
+\hat \mu_g(f) &= \int_X e^{if(x)}\mu_g(\de x) = \int_X e^{if(x)+g(x)} \mu_g(\de x) \cdot e^{-\frac{1}{2}\|g\|_{L^2(X,\gamma)}^2} = e^{-\frac{1}{2}\|g\|_{L^2(X,\gamma)}^2} \cdot \int_X e^{i[f(x)-ig(x)]}\gamma(\de x) \\
+&= e^{-\frac{1}{2}\|g\|_{L^2(X,\gamma)}^2} \cdot \hat \gamma(f-ig) = \exp\left({-\frac{1}{2}\|g\|_{L^2(X,\gamma)}^2}\right) \cdot \exp \left(i a_\gamma(f-ig)-\frac{1}{2}B_\gamma(f-ig,f-ig)\right)\\
+\intertext{Now note that $a_\gamma(g) = 0$, $B_\gamma(f,g) = R_\gamma g(f)$, $B_\gamma(g,g) = \|g\|_{L^2(X,\gamma)}^2$ and $B_\gamma(f,f) = \|j(f)\|_{L^2(X,\gamma)}^2$, hence}
+&= \exp\left({-\frac{1}{2}\|g\|_{L^2(X,\gamma)}^2}\right) \cdot \exp \left(i a_\gamma(f)-\frac{1}{2}\|j(f)\|_{L^2(X,\gamma)}^2 + iR_\gamma g(f) + \frac{1}{2}\|g\|_{L^2(X,\gamma)}^2\right)\\
+&= \exp\left\{i[a_\gamma(f) + R_\gamma g(f)]-\frac{1}{2}\|j(f)\|_{L^2(X,\gamma)}^2\right\}
+\end{align*}
+Note that this calculation is not actually valid without further justification as in the step from first to second line we evaluated the characteristic function $\hat \gamma$ in the linear continuous functional $f-ig$ which is not real (But we defined the functional only for real linear continuous functionals). This can be done rigorously by a few more lines of arguments from complex analysis, as done in the proof in \cite{Lunardi}, but the formal calculation yields enough insight for our purpose. 
 \end{proof}
+\begin{remark}
 \begin{itemize}
 \item Lemma \ref{lem:prelim_CM} is \textit{almost} what we want: We obtain a density of a shifted Gaussian with respect to its unshifted reference measure, but we cannot choose the shift directly: For a given $g\in X_\gamma^*$ we obtain a shift of $R_\gamma g$ in the mean. We need to reverse this in order to choose any shift we want. 
 \item We can already see here why not every shift will be feasible: With lemma \ref{lem:prelim_CM} we can only acquire shifts which are in the range of $R_\gamma$ -- this is exactly the Cameron-Martin space. This means that we can only take shifts $h\in H$ from the Cameron-Martin space if we want to get a measure which -- shifted by $h$ -- are absolutely continuous w.r.t. their unshifted reference measure (i.e. we have a density). The Cameron-Martin theorem collects all these statements.
 \end{itemize} 
-\begin{theorem}[{\cite[Theorem 3.1.5]{Lunardi}}]
+\end{remark}
+\begin{theorem}[{\cite[Theorem 3.1.5]{Lunardi}}]\label{thm:CM}
 Let $\gamma$ be a Gaussian measure on a Banach space $X$. For $h\in X$, define the shifted measure $\gamma_h$ by $\gamma_h(\cdot) = \gamma(\cdot - h)$.
 \begin{itemize}
 \item If $h\in H$, then the measure $\gamma_h$ is equivalent to $\gamma$ and $\frac{\de \gamma_h}{\de \gamma }(x) = \rho_h(x)$ with
-\[\rho_h(x) = \exp\left\{\hat h(x) - \frac{1}{2}|h|_H^2\right\}.\]
+\[\rho_h(x) = \exp\left\{R_\gamma^{-1} h(x) - \frac{1}{2}|h|_H^2\right\}.\]
 \item If $h\not\in H$, then $\gamma_h \bot \gamma$ (the measures are singular with respect to each other).
 \end{itemize}
-This means that a two Gaussian measures differing only by a shift in the domain are either equivalent (if the shift is in the Cameron-Martin space) or singular. There is no middle ground as in the case of the Lebesgue measure and the Lebesgue measure on $[0,1]$, where the latter is absolutely continuous w.r.t. the other but not the other way around.
+This means that two Gaussian measures differing only by a shift in the domain are either equivalent (if the shift is in the Cameron-Martin space) or singular. There is no middle ground as in the case of the Lebesgue measure and the Lebesgue measure on $[0,1]$, where the latter is absolutely continuous w.r.t. the other but not the other way around.
 \end{theorem}
+\begin{remark}
+When comparing lemma \ref{lem:prelim_CM} and \ref{thm:CM}, $g = R_\gamma^{-1} h$ and equivalently $R_\gamma g = h$, i.e. we see that we can only realize shifts $h$ which are in the range of $R_\gamma$, i.e. the Cameron-Martin space. Note that $|h|_H = \|R_\gamma^{-1} h\|_{L^2(X,\gamma)} = \|g\|_{L^2(X,\gamma)}$. The proof relies on lemma \ref{lem:prelim_CM} for the first statement. To show singularity in the case $h\not\in H$, it uses the notion of Hellinger distance (which is a distance between measures and is not covered here) to show that $\gamma$ and $\gamma_h$ are ``too far away from each other'' to have any joint support.
+\end{remark}
+\myboxtwo{\subsection*{Example \circled{1}: Gaussian Shifts in finite dimensions (cont'd)}
+We already saw that the formula we derived by elementary calculation matches the formula for Theorem \ref{thm:CM} in the ``equivalence'' case. In our case, $\Sigma$ is invertible, and thus $H = \R^d$, which makes sense: If we shift a non-degenerate multivariate Gaussian, we will obtain an equivalent measure. So we can't obtain a singular measure by shifting. The next two examples show two reasons why equivalence might \emph{not} work out.
+}
+\myboxtwo{\subsection*{Example \circled{2}: Gaussian Shifts for an infinite product of standard Gaussians}
+We derived before that $H = l^2$, i.e. we can only shift the mean by an element of $l^2$. In particular, for $h = (1,1,\ldots)$, $\gamma = \bigotimes N(0, 1)$ and $\gamma_h = \bigotimes N(1, 1)$ are singular with respect to each other (although the shift is not ``that big''! For a given feasible shift $h\in l^2$, i.e. $\gamma_h = \bigotimes_{j\in\N} N(h_j, 1)$, the Cameron-Martin theorem yields
+\[ \frac{\de \gamma_h}{\de \gamma}(x) = \exp \left\{\langle h, x\rangle_{l^2} - \frac{1}{2}\|h\|_{l^2}^2\right\}.\]
+Another way to see where the problem comes in when having infinite dimensions is the following: Let's change our measure to $\gamma = \bigotimes_{j=1}^J N(0,1)$, i.e. we don't have infinitely many Gaussians but only ``very many''. Then basic intuition (and our finite-dimensional considerations) tell us that for any shift $h\in\R^J$, the measures $\gamma$ and $\gamma_h$ should be equivalent. This is indeed the case and the Cameron-Martin formula reduces to
+\[ \frac{\de \gamma_h}{\de \gamma}(x) = \exp \left\{\sum_{j=1}^Jh_jx_j - \frac{1}{2}\sum_{k=1}^J h_k^2\right\}.\]
+This is a well-defined term for any fixed $J$ (and thus the density exists), but in the limit $J\to\infty$, the sum $\sum_{k=1}^J h_k^2$ becomes the $l^2$-norm of $h$ and we have to be careful which shift $h$ we choose.
+}
+\myboxtwo{\subsection*{Gaussian shifts for a degenerate Gaussian in 2-d}
+We know that $H = \{0\}\times \R$, so we can only shift in the second component. This makes sense as the complete probability mass of $\gamma$ rests on the axis $x_1=p$, so we can't move it in $x_1$-direction without losing equivalence. The Cameron-Martin formula states that for $h = (h_1,0)^T \in H$ (recall that $R_\gamma^{-1} (0,h_2)^T = (h_1(x_1-p)+h_2(x_2-q))/\sigma^2$ for arbitrary $h_1\in\R$, 
+\[ \frac{\de \gamma_h}{\de \gamma}(x) = \exp\left\{\frac{h_1(x_1-p)}{\sigma^2}\right\}\cdot \exp\left\{\frac{h_2(x_2-q)}{\sigma^2} - \frac{h_2^2}{2\sigma^2} \right\} \]
+Is the multplicative factor with arbitrary $h_1$ a contradiction? No: For $x_1 = p$ this factor is the identity and on $x_1 \neq p$ the measure $\gamma$ is not supported. We can try to put as much value on the density of $\gamma_h$ w.r.t. $\gamma$, but by courtesy of $C\cdot 0 = 0$ we will obtain the same result.
+
+For simplicity it makes sense to choose $h_1=0$ and thus we write
+\[ \frac{\de \gamma_h}{\de \gamma}(x) = \exp\left\{\frac{h_2(x_2-q)}{\sigma^2} - \frac{h_2^2}{2\sigma^2} \right\} \]
+}
+\section{Interesting infinite-dimensional examples}
+So far, the infinite product of i.i.d Gaussians was our only infinite-dimensional example. In this section, we will look at some Banach-space-valued examples you are more likely to meet in the wild.
+\subsection{Gaussian measures in Hilbert space}
+We record a few facts about operators in Hilbert spaces which we will need. Consult \cite{Lunardi} and \cite{brezis2010functional} for proofs and details. Let $X$ be an infinite-dimensional separable Hilbert space with norm $\|\cdot\|$ and inner product $\langle\cdot,\cdot\rangle$. We identify $X^*$ with $X$ via Riesz' representation theorem. We call $\mathcal L(X)$ the set of linear and bounded operators $X\to X$.
+\begin{itemize}
+\item $L\in \mathcal L(X)$ is nonnegative iff $\langle Lx,x\rangle \geq 0$ for all $x\in X$.
+\item $L\in \mathcal L(X)$ is called compact iff $L$ is the limit of a sequence of finite rank operators in the operator norm.
+\item $L\in \mathcal L(X)$ is called self-adjoint iff $\langle Lx, y\rangle = \langle x, Ly\rangle$ for any $x,y\in X$.
+\item A nonnegative, adjoint operator is called \textit{nuclear} or \textit{of trace-class} iff there is an orthonormal basis $\{e_k: k\in\N\}$ of $X$ such that 
+\[\operatorname{trace}(L) := \sum_{k=1}^\infty \langle Le_k,e_k\rangle < \infty.\]
+\item Every nuclear operator is compact.
+\item Every operator $L\in\mathcal L(X)$ that can be written in the form
+\[Lx = \sum_{k=1}^\infty \alpha_k \langle x, f_k\rangle f_k \]
+for some orthonormal basis $\{f_k:k\in\N\}$ of $X$ is compact.
+\item For every compact and self-adjoint operator $L\in\mathcal L(X)$ there exists an orthonormal basis of $X$ given by $\{e_k:k\in\N\}$ consisting of eigenvectors of $L$ such that 
+\begin{equation}\label{eq:formGaussianHilbert} Lx = \sum_{k=1}^\infty \lambda_k \langle x, e_k\rangle,
+\end{equation}
+where $Le_k = \lambda e_k$ for $\lambda_k\in\R$. If $L$ is non-negative, all $\lambda_k$ are non-negative.
+\paragraph{On the form of $a_\gamma$ and $B_\gamma$ in the Hilbert space setting:} Due to Riesz' representation theorem, we have a more direct way of dealing with $a_\gamma$ and $B_\gamma$: Take a Gaussian measure in a Hilbert space (but regard it as a Banach space). Then continuity of $a_\gamma : X^*\to \R$ and $B_\gamma: X^*\times X^*\to \R$ suffices (and we don't need weak-*-continuity in this case) that there is an element $a\in X$ such that $a_\gamma(f) = \langle f, a\rangle$ and there is a self-adjoint operator $Q\in\mathcal L(X)$ such that $B_\gamma(f,g) = \langle Q f, g\rangle$, hence
+\begin{displaymath}
+\langle Qf, g\rangle = \int_X \langle f, x-a\rangle \langle g, x-y\rangle \, \gamma(\de x).
+\end{displaymath} 
+We call $Q$ the covariance operator. The measure's characteristic function is
+\begin{equation}\label{eq:charHilbert}
+\hat \gamma(f) = \exp\left\{i\langle f, a\rangle - \frac{1}{2}\langle Qf, f\rangle\right\}
+\end{equation}
+
+
+The next theorem states exactly which form Gaussian measures in Hilbert spaces can have.
+
+\begin{theorem}
+\begin{enumerate}
+\item If $\gamma$ is a Gaussian measure on $X$, then its characteristic function is given by \eqref{eq:charHilbert} for some $a\in X$ and a self-adjoint, non-negative trace-class operator $Q\in \mathcal L(X)$.
+\item For any $a\in X$ and a self-adjoint, non-negative trace-class operator $Q\in \mathcal L(X)$, the characteristic function in \eqref{eq:charHilbert} constitutes a Gaussian measure on $X$.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}
+This theorem and \eqref{eq:formGaussianHilbert} shows that Gaussian measures $\gamma$ in infinite-dimensional Hilbert spaces are actually very simple: Given the measure's mean $a$ and covariance operator $Q$, we have a basis of orthonormal eigenfunctions, such that $Qe_k = \lambda_k e_k$, with $\lambda_k \geq 0$, over which the measure diagonalizes. Then $a = \sum_{k=1}^\infty a_k\cdot e_k$ and we can say that
+\begin{displaymath}
+\gamma = \bigotimes_{k=1}^\infty N(a_k, \lambda_k),
+\end{displaymath}
+i.e. a product of infinitely many independent Gaussians with mean $a_k$ and variance\footnote{be careful with squares here: usually we say that $\sigma^2$ is a variance, i.e. $\sqrt{\lambda_k}$ is the standard deviation here} $\lambda_k$. The correspondence here is that the $k$-th factor on the right hand side belongs to direction $e_k$ and equivalently: A Gaussian random variable $x\in X$ is spanned as follows:
+\begin{equation}
+x = \sum_{k=1}^\infty (a_k + \eta_k\cdot \sqrt{\lambda_k})\cdot e_k,\quad \eta_k \sim N(0,1) \text{ i.i.d.}
+\end{equation}
+\end{remark}
+
+Now we are ready to understand what the Cameron-Martin space of a Hilbert-space-valued Gaussian measure looks like: Linear continuous functionals $f\in X^* = X$ are just elements of the Hilbert space with $f(x) = \langle f, x\rangle$ for any $x\in X$, and mean and covariance are given by $a\in X$ and $Q\in \mathcal L(X)$ as argued above. Then $j(f) = f-a$ \ednote{Das ist vielleicht nicht richtig? Korrigieren, weitermachen.}
+
+\end{itemize}
+\subsection{Gaussian processes} \ednote{steal from Nate}
+\section{The Feldman-Hajek theorem}
+This section is mostly interesting for readers who want to study Bayesian inverse problems.
 \section{\Frechet spaces}
 Let $X$ be a topological vector space with topology $\T$. A few preliminary definitions:
 \begin{definition}
@@ -613,7 +823,7 @@ For 2.) we see that
 which is finitely bounded uniformly in $R$ as we can set $k$ such that the first sum is arbitrarily small and the second sum is some finite value (the $l^2$-norm of $a^{(k)}$.
 \end{proof}
 \section{Acknowledgments}
-Thank Nate Eldredge, mention his lecture notes, the ISEM lecture notes, Bruce Driver's notes, DaPrato/Zabczyk, Brezis for Functional Analysis. Mention distill.pub
+Thank Nate Eldredge, mention his lecture notes, the ISEM lecture notes, Bruce Driver's notes, DaPrato/Zabczyk, Brezis for Functional Analysis. Mention distill.pub and Conjugated Gradient without the agonizing pain.
 \bibliographystyle{siam}
 \bibliography{lit}
 \end{document}

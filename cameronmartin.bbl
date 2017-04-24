@@ -1,7 +1,20 @@
 \begin{thebibliography}{1}
 
+\bibitem{brezis2010functional}
+{\sc H.~Brezis}, {\em Functional analysis, Sobolev spaces and partial
+  differential equations}, Springer Science \& Business Media, 2010.
+
+\bibitem{eldredge2016analysis}
+{\sc N.~Eldredge}, {\em Analysis and probability on infinite-dimensional
+  spaces}, arXiv preprint arXiv:1607.03591,  (2016).
+
 \bibitem{Lunardi}
 {\sc A.~Lunardi, M.~Miranda, and D.~Pallara}, {\em {ISEM 19 lecture notes}},
+  2016.
+
+\bibitem{paulsen2016introduction}
+{\sc V.~I. Paulsen and M.~Raghupathi}, {\em An introduction to the theory of
+  reproducing kernel Hilbert spaces}, vol.~152, Cambridge University Press,
   2016.
 
 \end{thebibliography}
