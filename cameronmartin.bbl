@@ -1,8 +1,16 @@
 \begin{thebibliography}{1}
 
+\bibitem{bogachev1998gaussian}
+{\sc V.~I. Bogachev and V.~I. Bogachev}, {\em Gaussian measures}, vol.~62,
+  American Mathematical Society Providence, 1998.
+
 \bibitem{brezis2010functional}
 {\sc H.~Brezis}, {\em Functional analysis, Sobolev spaces and partial
   differential equations}, Springer Science \& Business Media, 2010.
+
+\bibitem{da2014stochastic}
+{\sc G.~Da~Prato and J.~Zabczyk}, {\em Stochastic equations in infinite
+  dimensions}, Cambridge university press, 2014.
 
 \bibitem{eldredge2016analysis}
 {\sc N.~Eldredge}, {\em Analysis and probability on infinite-dimensional
