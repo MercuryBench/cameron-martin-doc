@@ -1,27 +1,27 @@
 \begin{thebibliography}{1}
 
 \bibitem{bogachev1998gaussian}
-{\sc V.~I. Bogachev and V.~I. Bogachev}, {\em Gaussian measures}, vol.~62,
+{\normalfont \scshape V.~I. Bogachev and V.~I. Bogachev}, {\em Gaussian measures}, vol.~62,
   American Mathematical Society Providence, 1998.
 
 \bibitem{brezis2010functional}
-{\sc H.~Brezis}, {\em Functional analysis, Sobolev spaces and partial
+{\normalfont \scshape  H.~Brezis}, {\em Functional analysis, Sobolev spaces and partial
   differential equations}, Springer Science \& Business Media, 2010.
 
 \bibitem{da2014stochastic}
-{\sc G.~Da~Prato and J.~Zabczyk}, {\em Stochastic equations in infinite
+{\normalfont \scshape  G.~Da~Prato and J.~Zabczyk}, {\em Stochastic equations in infinite
   dimensions}, Cambridge university press, 2014.
 
 \bibitem{eldredge2016analysis}
-{\sc N.~Eldredge}, {\em Analysis and probability on infinite-dimensional
+{\normalfont \scshape  N.~Eldredge}, {\em Analysis and probability on infinite-dimensional
   spaces}, arXiv preprint arXiv:1607.03591,  (2016).
 
 \bibitem{Lunardi}
-{\sc A.~Lunardi, M.~Miranda, and D.~Pallara}, {\em {ISEM 19 lecture notes}},
+{\normalfont \scshape  A.~Lunardi, M.~Miranda, and D.~Pallara}, {\em {ISEM 19 lecture notes}},
   2016.
 
 \bibitem{paulsen2016introduction}
-{\sc V.~I. Paulsen and M.~Raghupathi}, {\em An introduction to the theory of
+{\normalfont \scshape  V.~I. Paulsen and M.~Raghupathi}, {\em An introduction to the theory of
   reproducing kernel Hilbert spaces}, vol.~152, Cambridge University Press,
   2016.
 

@@ -1,7 +1,6 @@
 \documentclass{scrartcl}
 \usepackage[latin9]{inputenc}  
 \usepackage[T1]{fontenc}
-\usepackage[english]{babel} 
 \usepackage{kantlipsum}
 \usepackage{amsfonts}
 \usepackage{tikz}
@@ -326,7 +325,7 @@ For, $\gamma = \delta_p \otimes N(q, \sigma^2)$ we established that $X^* = \R^2$
 By $L^2$ continuity, $a_\gamma$, $\hat \gamma$ and $B_\gamma$ can be extended with their domains changed: For any $X^*$ we can also use elements from $X_\gamma^*$, while for $g\in X_\gamma^*$, $a_\gamma(g) = 0$, $\hat \gamma(f) = \exp\{-\frac{1}{2}\|f\|_{L^2(X,\gamma)}\}$ and $B_\gamma(g_1, g_2) = \int_X g_1(x)g_2(x)\gamma(\de x)$ for $g_1,g_2\in X_\gamma^*$. Note that $X_\gamma^*$ is not a superset of $X^*$ because its elements all need to be centred (as random variables, i.e. $a_\gamma(f) = 0$ for $f\in X_\gamma^*$.
 
 \section{Transporting the Hilbert space structure into the probability space}\label{sec:CM}
-So far, we only have a Hilbert space structure in the domain of linear functionals $f\in X^*$ (strictly speaking: on $X_\gamma^*$). We define a functional which will map $X_\gamma^*$ into $X$. This functional will actually by an isometry, so we can transport the Hilbert space structure into a subspace of $X$ (this will be the Cameron-Martin space).
+So far, we only have a Hilbert space structure in the domain of linear functionals $f\in X^*$ (strictly speaking: on $X_\gamma^*$). We define a functional which will map $X_\gamma^*$ into $X$. This functional will actually be an isometry, so we can transport the Hilbert space structure into a subspace of $X$ (this will be the Cameron-Martin space).
 
 We set
 \begin{align*}
@@ -365,13 +364,13 @@ The most important thing of this section is at its end: We define the Cameron-Ma
 \begin{displaymath}
 H = \operatorname{ran} R_\gamma
 \end{displaymath}
-$R_\gamma$ is not onto, so $H\subsetneq X$. There are several senses in which $H$ is ``small'': If $\gamma$ is centred, $\gamma(H) = 0$, i.e. samples of $\gamma$ will almost surely miss $H$ also, the embedding $H\hookrightarrow X$ is compact.
+$R_\gamma$ is not onto, so $H\subsetneq X$. There are several senses in which $H$ is ``small'': If $\gamma$ is centred, $\gamma(H) = 0$, i.e. samples of $\gamma$ will almost surely miss $H$; also, the embedding $H\hookrightarrow X$ is compact.
 
 There is an important equivalent characterization for the Cameron-Martin space $H$ which many authors choose as its definition:
 \begin{prop}
 Define $|h|_H = \sup\{f(h): f\in X^*, \|j(f)\|_{L^2(X, \gamma)} \leq 1\}$, the evaluation norm of $h\in X$. Then the following two statements are equivalent:
 \begin{enumerate}
-\item $h\in H$, i.e. $h = R_\gamma \hat h$.
+\item $h\in H$, i.e. $h = R_\gamma \hat h$ for some $\hat h\in X_\gamma^*$.
 \item $|h|_H < \infty$.
 \end{enumerate}
 Also, if $h\in H$ (and thus both conditions are true), $|h|_H = \|\hat h\|_{L^2(X,\gamma)}$. This means that $R_\gamma: X_\gamma^* \to H$ is an isometry, rendering $H$ a Hilbert space  with inner product $\langle h, k\rangle_H = \langle \hat h, \hat k\rangle_{L^2(X,\gamma)}$ for $h = R_\gamma \hat h, k = R_\gamma \hat k$.
@@ -655,6 +654,79 @@ Take $w^{(n)} = e_n$, i.e. the $n$-th basis element. Set $a=0$ for simplicity. D
  Define $z^{(n)} = Q^{1/2} w^{(n)} = \lambda_n^{1/2} e_n$, then    the functional $f_n$ can be re-written as $f_n: x\mapsto \langle Q^{-1/2} z^{(n)}, x\rangle$ (compare this with the definition of $X_\gamma^*$ in theorem \ref{thm:Hilbert}). In this case still $f_n\to 0$ (we haven't changed $f_n$) but also $\|z_n\|^2 = \lambda_n \to 0$, i.e. convergence of $f_n$ goes hand in hand with convergence of $z_n$. By the general idea of everything going on with Cameron-Martin theory, this is desirable: $f_n$ is a sequence in the RKHS, $z^{(n)}$ is the corresponding isomorphic sequence in Cameron-Martin space. The sequence $w^{(n)}$ is just weird and meaningless. With this idea in mind, everything else works as well. I encourage you to read the whole proof in \cite{Lunardi}.
 \end{remark}
 \paragraph{Shifts of Gaussians in the Hilbert space setting:} From theorem \ref{thm:Hilbert} we see immediately that we can shift a Gaussian exactly by vectors in the range of $Q^{1/2}$ in order to obtain an equivalent Gaussian measure.}
+
+\myboxtwo{
+\subsection*{Example \circled{5}: Gaussian random variables on $l^1$}
+Set $X = l^1$ and $\gamma = \bigotimes_{k=1}^\infty \mathcal N(0, \sigma_k^2)$. In order to make sure (using the Kolmogorov two-series theorem) that samples from this measure are in $l^1$ a.s., we need to enforce
+\begin{displaymath}
+\sum_k \sigma_k < \infty,\quad \sum_k \sigma_k^2 < \infty.
+\end{displaymath}
+As is common, we identify $(l^1)^* = l^\infty$ in the sense that for $f\in (l^1)^*$, $f(x) = \sum_k f_k\cdot x_k$ for the sequence $(f_k)_k \in l^\infty$. 
+Then, $a_\gamma = 0\in X^*$ and 
+\begin{align*}
+B_\gamma(f,g) &= \int_X \left(\sum_k f_k x_k\right) \cdot \left(\sum_l g_l x_l\right) \gamma(\mathrm d x)\\
+&= \sum_{k} f_k g_k \int_{\mathbb R} x_k^2 \,\mathcal N(0, \sigma_k^2)(\mathrm d x_k)\\
+&= \sum_k f_k g_k \sigma_k^2
+\end{align*}
+The reconstructing Kernel Hilbert space is computed in the following lemma:
+\begin{lemma}
+\begin{align*}
+X_\gamma^* := \overline{j(l^\infty)}^{L^2(X,\gamma)} &= \left\{f: l^1\to \mathbb R: ~ f(x) = \sum_{k=1}^\infty x_k\cdot \frac{z_k}{\sigma_k},~ z\in l^2\right\}\\
+&= \left\{\left(\frac{z_k}{\sigma_k}\right)_k: (z_k)_k \in l^2\right\}\\
+&= \left\{(y_k)_k: \sum_{k=1}^\infty y_k^2\sigma_k^2 < \infty\right\}\end{align*}
+\end{lemma}
+\begin{proof}
+The equivalence of all representations on the right hand side is easily seen so we just need to show the equality 
+\[ \overline{j(l^\infty)}^{L^2(X,\gamma)} = V:= \left\{f: l^1\to \mathbb R: ~ f(x) = \sum_{k=1}^\infty x_k\cdot \frac{z_k}{\sigma_k},~ z\in l^2\right\}.\]
+\paragraph{``$\supseteq$'':} Consider an element $f\in V$, hence there is a $z\in l^2$ such that
+\[f(x) = \sum_{k=1}^\infty x_k\cdot \frac{z_k}{\sigma_k}.\]
+We need to show that $f \in \overline{j(l^\infty)}^{L^2(X,\gamma)}$, i.e. that it is an $L^2$-limit of elements in $j(l^\infty)$. Note that $j$ is the plain inclusion $l^\infty \hookrightarrow L^2(X,\gamma)$ because the measure $\gamma$ is centered. We can define explicitly
+\[(f^{(n)})_n \subset l^\infty, \quad f^{(n)}(x) = \sum_{k=1}^n x_k \cdot \frac{z_k}{\sigma_k}.\]
+We will show that this sequence of elements in $j(l^\infty)$ (this inclusion is trivial because of the finite amount of terms in each $f^{(n)}$) converges in $L^2(X,\gamma)$ to $f$, which is exactly what we need. Let without loss of generality $m<n$, then
+\begin{align*}
+\|f^{(n)}-f^{(m)}\|_{L^2(X,\gamma)}^2 &= \sum_{k=m+1}^n \frac{z_k^2}{\sigma_k^2} \cdot \int_{\mathbb R} x_k^2 \,\mathcal N(0, \sigma_k^2)(\mathrm d x_k) \\
+&= \sum_{k=m+1}^n z_k^2 
+\end{align*}
+which converges to $0$ for $m,n\to \infty$ because $z\in l^2$. Hence, $f^{(n)}$ is a Cauchy sequence in $L^2(X,\gamma)$. As this space is complete, the limit $\tilde f = \lim_n f^{(n)}$  exists and $\tilde f = f$.
+\paragraph{``$\subseteq$'':} Take $f\in X_\gamma^*$, then by definition there exists a sequence $g^{(n)}$ of elements in $l^\infty$ such that $g^{(n)} \to f$ in $L^2(X, \gamma)$. We show that $f$ can be represented by an element of $V$. First, we recall that $g^{(n)} = (g^{(n)}_k)_k$ and we define $z_k^{(n)} := \sigma_k \cdot g^{(n)}_k$. By convergence of the $g^{(n)}$, we also have convergence of the $g^{(n)}_k$, i.e. we can define
+\[z_k := \lim_{n\to\infty} z_k^{(n)} = \sigma_k \cdot \lim_{n\to\infty}  g^{(n)}_k.\]
+ Then 
+\[g^{(n)}(x) = \sum_{k=1}^\infty g^{(n)}_k\cdot x_k = \sum_{k=1}^\infty \frac{z_k^{(n)}}{\sigma_k}\cdot x_k.\]
+We claim that the sequence $(g^{(n)})_n$ converges (again in $L^2$) to $\tilde f$, where 
+\[\tilde f(x) := \sum_{k=1}^\infty x_k\cdot \frac{z_k}{\sigma_k},\]
+where the $z_k$ have been defined above. This is indeed the case, as
+\begin{align*} \|f - \tilde f\|_{L^2(X,\gamma)}^2 &\leq \|f - g^{(n)}\|_{L^2(X,\gamma)}^2 + \|g^{(n)} - \tilde f\|_{L^2(X,\gamma)}^2 \\
+&\leq \|f - g^{(n)}\|_{L^2(X,\gamma)}^2 + \sum_{k=1}^\infty \frac{|z_k^{(n)} - z_k|^2}{\sigma_k^2}\cdot \sigma_k^2 \\
+&\leq \|f - g^{(n)}\|_{L^2(X,\gamma)}^2 + \sum_{k=1}^N |z_k^{(n)} - z_k|^2 + \sum_{k=N+1}^\infty \underbrace{\frac{|z_k^{(n)} - z_k|^2}{\sigma_k^2}}_{\leq C, \text{ as } g, g^{(n)}\in l^\infty}\cdot \sigma_k^2\\
+&\leq \|f - g^{(n)}\|_{L^2(X,\gamma)}^2 + \sum_{k=1}^N |z_k^{(n)} - z_k|^2 + C\cdot  \sum_{k=N+1}^\infty \sigma_k^2 \end{align*}
+Now we set $N$ large enough such that $\sum_{k=N+1}^\infty \sigma_k^2 < \frac{\epsilon}{3C}$, further $n$ large enough such that $|z_k^{(n)} - z_k|^2 < \frac{\epsilon}{3N}$ for all $k=1,\ldots,N$ and $n$ (also) large enough such that $\|f-g^{(n)}\|_{L^2(X,\gamma)} < \epsilon/3$. Then, all in all, $\|f-\tilde f\|_{L^2(X,\gamma)}$, is arbitrarily small and hence equal in $L^2(X,\gamma)$. As $\tilde f\in V$, we have shown $X_\gamma^*\subseteq V$.
+\end{proof}
+The Cameron--Martin space is now $H = R_\gamma X_\gamma^*$, see the following lemma.
+
+\begin{lemma}
+The mapping $R_\gamma : X_\gamma^*\to X$ is $R_\gamma ((w_k)_k) = (\sigma_k^2 w_k)_k$ and the Cameron--Martin space is \[H = \{(y_k)_k:~ \|y\|_H^2 := \sum_{k\in\mathbb N} \frac{y_k^2}{\sigma_k^2} < \infty\}.\]
+\end{lemma}
+\begin{proof}
+Take $f\in X_\gamma^*$ (i.e. $f = (z_k/\sigma_k)_k$ for some $z\in l^2$) and $g\in X^*$, then by definition,
+\begin{align*}
+R_\gamma f(g) &= \int_X f(x) (g(x)-a_\gamma(g))\gamma(\mathrm d x) = \sum_{k=1}^\infty \frac{z_k}{\sigma_k}\cdot g_k \cdot \sigma_k^2 = \sum_{k=1}^\infty z_k\cdot g_k \cdot \sigma_k \\
+&= g((\sigma_k\cdot z_k)_k),
+\end{align*}
+where in the last step we used $g\in X^* = l^\infty$. Then by the duality theory outlined above, we can identify
+\[R_\gamma f = R_\gamma\left( \left(\frac{z_k}{\sigma_k}\right)_k\right) = (\sigma_k\cdot z_k)_k,\]
+which is the first part of the lemma's statement. 
+The Cameron--Martin space is
+\begin{align*}
+H &:= R_\gamma X_\gamma^* = R_\gamma\left\{\left(\frac{z_k}{\sigma_k}\right)_k:~ z\in l^2\right\}\\
+&= \{(\sigma_k\cdot z_k)_k: z\in l^2\}\\
+&=\left\{(y_k)_k:~ \sum_{k\in\mathbb N} \frac{y_k^2}{\sigma_k^2} < \infty\right\}.
+\end{align*}
+Note finally that $H\subset l^1$, as for any $y\in H$,
+\begin{align*}
+\|y\|_1 = \sum_{k=1}^\infty |y_k| = \sum_{k=1}^\infty \frac{|y_k|}{\sigma_k}\cdot \sigma_k \leq \sqrt{\sum_{k=1}^\infty \frac{|y_k|^2}{\sigma_k^2}}\cdot \sqrt{\sum_{k=1}^\infty {\sigma_k^2}} \leq \|y\|_H\cdot \sqrt{\sum_{k=1}^\infty {\sigma_k^2}}.
+\end{align*}
+\end{proof}
+}
 \subsection{Gaussian processes}
 We consider the special case $X = \{f \in C([0,1]):~ f(0) = 0\}$, i.e. we want to construct Gaussian measures on the space of continuous functions over the unit interval with zero initial condition. One choice leads to Brownian motion (the corresponding measure is called the \textit{classical Wiener space}), another to the Ornstein-Uhlenbeck process etc. We start with a few facts on Gaussian processes.
 
