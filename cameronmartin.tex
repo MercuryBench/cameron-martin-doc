@@ -446,7 +446,7 @@ Consider $H_0^1 = \{f\in L^2([0,1]): ~ Df\in L^2([0,1]), f(0)=f(1)=0\}$ where $D
 \[K(x,y) = \begin{cases}x(1-y) & \text{ for } x\leq y\\(1-x)y & \text{ for } x > y\end{cases}.\]
 By standard theory, $H_0^1$ is a Hilbert space with inner product $\langle f, g\rangle = \int_0^1 f'(t)g'(t)\de t$. Evaluation is bounded, as
 \begin{align*}
-|f(y)| = \left|\int_0^y f'(t) \de t\right| = \left|\int_0^1 f'(t) \chi_{[0,y]}(t)\d t\right| \leq \langle f,f\rangle.
+|f(y)| = \left|\int_0^y f'(t) \de t\right| = \left|\int_0^1 f'(t) \chi_{[0,y]}(t)\de t\right| \leq \langle f,f\rangle.
 \end{align*}
 Thus, $H_0^1$ is an RKHS with the reconstruction property. This is also easily checked:
 \begin{align*}
